@@ -1,22 +1,38 @@
 package java_course_04_02;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class java_course_04_02 {
+	
     public static void main(String[] args) {
         // 替换为你的 CSV 文件绝对路径
         String inputFilePath = "C:\\Users\\234781\\eclipse-workspace\\database\\src\\main\\java\\java_course_04_02\\person.csv"; // 读取 CSV 文件的路径
-        String outputFilePath = "C:\\Users\\234781\\eclipse-workspace\\database\\src\\main\\java\\java_course_04_02\\new_person.csv"; // 写入 CSV 文件的路径
-
+        String baseFileName = "C:\\Users\\234781\\eclipse-workspace\\database\\src\\main\\java\\java_course_04_02\\new_person.csv"; // 写入 CSV 文件的路径
+        String outputFilePath = generateFileNameWithTimestamp(baseFileName);
         // 从 CSV 文件中读取数据
         List<String[]> data = readCSV(inputFilePath);
 
         // 将数据写入到另一个 CSV 文件
         writeCSV(outputFilePath, data);
     }
+    
+    private static String generateFileNameWithTimestamp(String baseFileName) {
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        
+        // 格式化时间戳
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+        String timestamp = now.format(formatter);
 
+        // 生成带时间戳的文件名
+        return baseFileName + "_" + timestamp  +".csv";
+    }
+
+    
     private static List<String[]> readCSV(String filePath) {
         List<String[]> data = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
